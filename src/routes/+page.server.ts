@@ -4,7 +4,7 @@ import { redirect } from '@sveltejs/kit';
 
 const DISPLAY_HOURS_AGO = 24;
 
-async function sign_up(username: any): number {
+async function sign_up(username: any) {
 	console.log('sign up username=' + username);
 	const sign_up_res = await prisma.users.create({
 		data: {
@@ -15,7 +15,7 @@ async function sign_up(username: any): number {
 	console.log(sign_up_res);
 }
 
-async function get_user_id(username: String): Promise<number | null> {
+async function get_user_id(username: string): Promise<number | null> {
 	const user = await prisma.users.findFirst({ where: { name: username } });
 	if (user && user.id) {
 		return user.id;
@@ -26,12 +26,12 @@ async function get_user_id(username: String): Promise<number | null> {
 
 /** @type {import('./$types').Actions} */
 export const actions = {
-	new_post: async ({ cookies, request }) => {
+	new_post: async ({ request }) => {
 		const data = await request.formData();
 		const username = data.get('username');
 
 		console.log('about to find user = ' + username);
-		let user = await prisma.users.findFirst({ where: { name: username } });
+		const user = await prisma.users.findFirst({ where: { name: username } });
 
 		if (!user) {
 			console.log('No user found');
